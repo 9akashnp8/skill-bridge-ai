@@ -1,1 +1,1 @@
-from .main import chain
+from .main import chain  # noqa: F401

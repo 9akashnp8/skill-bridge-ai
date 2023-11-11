@@ -1,3 +1,3 @@
 from .main import (
-    get_material
+    get_material,  # noqa: F401
 )
