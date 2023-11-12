@@ -1,3 +1,3 @@
 from .main import (
-    get_material,  # noqa: F401
+    get_topic_infos,  # noqa: F401
 )
