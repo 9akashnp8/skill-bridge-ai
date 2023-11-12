@@ -1,11 +1,10 @@
 from decouple import config
 from langchain.llms.openai import OpenAI
 from langchain.prompts import PromptTemplate
-from langchain.schema import BaseOutputParser
 
 llm = OpenAI(openai_api_key=config("OPENAI_API_KEY"))
 
-prompt_template = """
+question_gen_template = """
 You are an enthusiastic AI Agent who loves helping people. You
 are tasked with generating (python) practice questions to help improve
 ones knowledge.
@@ -29,12 +28,32 @@ and n is a positive integer representing the number of characters to exclude fro
 topic: {topic}
 info: {info}
 """
-prompt = PromptTemplate.from_template(prompt_template)
+question_gen_prompt = PromptTemplate.from_template(question_gen_template)
 
+question_gen_chain = question_gen_prompt | llm
 
-class CommaSeparatedListOutputParser(BaseOutputParser):
-    def parse(self, text: str):
-        return text.strip().split(", ")
+question_validate_template = """
+You are an expert in analyzing similarity and making necessary changes.
 
+Your Instructions:
+1. Give a question or set of questions, you are tasked with enusuring that the given questions
+are similar to the "Sample Question" provided
+2. They must be similar in terms of being scenario based and being real-world problems.
+3. If the questions are NOT similar, modify the question and return it. If
+the questions are similar, simply return the original question.
 
-chain = prompt | llm
+Questions: {questions}
+
+Sample Question Format: 
+"Imagine you are developing a script to analyze server logs for a
+monitoring application. Each log entry includes a timestamp, log level, and a detailed message.
+However, you are specifically interested in extracting the timestamp and log level while
+excluding detailed module information to maintain brevity in your reports.
+
+Create a function, extract_log_summary(log_entry, n), where log_entry is a string log entry,
+and n is a positive integer representing the number of characters to exclude from the end of the log entry."
+"""
+
+question_validate_prompt = PromptTemplate.from_template(question_validate_template)
+
+gen_validate_chain = {"questions": question_gen_chain} | question_validate_prompt | llm

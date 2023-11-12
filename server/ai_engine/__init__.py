@@ -1,1 +1,1 @@
-from .main import chain  # noqa: F401
+from .utils import get_chain  # noqa: F401

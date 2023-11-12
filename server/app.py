@@ -2,15 +2,16 @@ import asyncio
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from ai_engine import chain
+from ai_engine import get_chain
 from text_collector import get_topic_infos
 
 app = FastAPI()
 
 
 @app.get("/practice/questions")
-async def get_root(topic: str):
-    topic_infos = get_topic_infos(topic, mock=True)
+async def get_root(topic: str, validate: bool, mock: bool = True):
+    topic_infos = get_topic_infos(topic, mock=mock)
+    chain = get_chain(validate)
     result = await asyncio.gather(
         *[
             chain.ainvoke({"topic": info.title, "info": info.info})
