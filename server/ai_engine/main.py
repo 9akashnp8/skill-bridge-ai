@@ -2,7 +2,7 @@ from decouple import config
 from langchain.llms.openai import OpenAI
 from langchain.prompts import PromptTemplate
 
-llm = OpenAI(openai_api_key=config("OPENAI_API_KEY"))
+llm = OpenAI(openai_api_key=config("OPENAI_API_KEY"), model_name="gpt-4")
 
 question_gen_template = """
 You are an enthusiastic AI Agent who loves helping people. You
@@ -47,11 +47,8 @@ Questions: {questions}
 Sample Question Format: 
 "Imagine you are developing a script to analyze server logs for a
 monitoring application. Each log entry includes a timestamp, log level, and a detailed message.
-However, you are specifically interested in extracting the timestamp and log level while
-excluding detailed module information to maintain brevity in your reports.
-
-Create a function, extract_log_summary(log_entry, n), where log_entry is a string log entry,
-and n is a positive integer representing the number of characters to exclude from the end of the log entry."
+Generate a function to extract the timestamp and log level while
+excluding detailed module information to maintain brevity in your reports."
 """
 
 question_validate_prompt = PromptTemplate.from_template(question_validate_template)
