@@ -1,6 +1,7 @@
 import asyncio
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from models import Payload
 from ai_engine import get_chain
@@ -8,6 +9,14 @@ from text_collector import get_topic_infos
 from db import insert_questions, get_topic_questions
 
 app = FastAPI()
+origins = ["http://localhost:5173"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/practice/questions")
