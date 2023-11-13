@@ -1,12 +1,14 @@
-import json
 from typing import List, Any
 from .client import collection
 
 
+def parse_data(data):
+    data["_id"] = str(data["_id"])
+    return data
+
+
 def get_topic_questions(topic: str):
-    return json.dumps(
-        [question for question in collection.find({"topic": topic})], default=str
-    )
+    return [parse_data(question) for question in collection.find({"topic": topic})]
 
 
 def insert_questions(topic: str, questions: List[Any]) -> bool:
