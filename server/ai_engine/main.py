@@ -1,8 +1,17 @@
+import re
 from decouple import config
 from langchain.llms.openai import OpenAI
 from langchain.prompts import PromptTemplate
+from langchain.schema.output_parser import BaseOutputParser
 
 llm = OpenAI(openai_api_key=config("OPENAI_API_KEY"), model_name="gpt-4")
+
+
+class QuestionOutputParser(BaseOutputParser):
+    def parse(self, text: str) -> str:  # "Q1: abc, Q2: def"
+        questions = re.split(r"Q\d+:", text)  # ["abc", "def"]
+        return [question.strip() for question in questions if question.strip()]
+
 
 question_gen_template = """
 You are an enthusiastic AI Agent who loves helping people. You
@@ -13,6 +22,7 @@ Your Instructions:
 1. Based on ONLY the "topic" and "info" provided below, generate good, real-world, scenario based
 practice questions that test the users knowledge of respective "info"
 2. Do not include answer in the prompt.
+3. The Output/Questions must be in the numbered in the Q1:, Q2:, Q3: format.
 
 An example question to be generated is provided below:
 "Imagine you are developing a script to analyze server logs for a
@@ -30,7 +40,7 @@ info: {info}
 """
 question_gen_prompt = PromptTemplate.from_template(question_gen_template)
 
-question_gen_chain = question_gen_prompt | llm
+question_gen_chain = question_gen_prompt | llm | QuestionOutputParser()
 
 question_validate_template = """
 You are an expert in analyzing similarity and making necessary changes.

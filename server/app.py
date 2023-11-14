@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import Payload
 from ai_engine import get_chain
 from text_collector import get_topic_infos
-from db import insert_questions, get_topic_questions
+from db import insert_questions, get_topic_questions, format_response
 
 app = FastAPI()
 origins = ["http://localhost:5173"]
@@ -36,5 +36,6 @@ async def get_root(payload: Payload):
             for info in topic_infos
         ]
     )
-    upload_result = insert_questions(topic, result)
-    return JSONResponse({"upload": upload_result, "questions": result})
+    questions = format_response(topic, result)
+    upload_result = insert_questions(questions)
+    return JSONResponse({"upload": upload_result, "questions": questions})
