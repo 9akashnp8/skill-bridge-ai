@@ -1,0 +1,41 @@
+body {
+    font-family: 'Inter Variable', sans-serif;
+    background-color: #111010;
+    color: white;
+    padding-inline: 1rem;
+}
+
+.main {
+    display: grid;
+    place-items: center;
+}
+
+.questionCard {
+    padding: 1.25rem;
+    background-color: #262626;
+    border-radius: 1rem;
+    width: 60%;
+}
+
+.questionCard:hover {
+    cursor: pointer;
+}
+
+.questionDialog {
+    width: 60%;
+    border: none;
+    color: white;
+    background-color: #404040;
+}
+
+::backdrop {
+    background-color: black;
+    opacity: 0.8;
+}
+
+.selectedTopic {
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    background-color: #38bdf8;
+    
+}
