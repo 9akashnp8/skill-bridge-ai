@@ -12,6 +12,7 @@ body {
 
 .questionCard {
     padding: 1.25rem;
+    margin-bottom: 1.5rem;
     background-color: #262626;
     border-radius: 1rem;
     width: 60%;
@@ -25,12 +26,14 @@ body {
     width: 60%;
     border: none;
     color: white;
+    outline: white solid 1px;
     background-color: #404040;
+    border-radius: 1rem;
 }
 
 ::backdrop {
-    background-color: black;
-    opacity: 0.8;
+    backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .selectedTopic {

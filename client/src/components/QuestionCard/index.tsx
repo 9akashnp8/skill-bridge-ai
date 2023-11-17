@@ -9,8 +9,8 @@ export default function QuestionCard({ question }: Props) {
     dialog.showModal();
   }
   return (
-    <p className="questionCard" onClick={handleClick}>
+    <div className="questionCard" onClick={handleClick}>
       {question}
-    </p>
+    </div>
   );
 }
